@@ -5,6 +5,7 @@ import {CENTER,TYPES,ESC} from './data'
 import {km} from './match'
 import {useApp} from './store'
 import {Countdown} from './Countdown'
+
 const icon=(c,h)=>L.divIcon({className:'pin '+c,html:h,iconSize:[34,34]})
 const STEPS=[['posted','Posted'],['accepted','Accepted'],['on_the_way','On the way'],['picked_up','Picked up']]
 function Fly({p}){const m=useMap();useEffect(()=>{m.flyTo(p,13)},[p[0],p[1]]);return null}
@@ -18,6 +19,7 @@ function Card({l,on,pick}){
   <div className="body"><h3>{l.quantity} meals: {TYPES[l.type].label}{l.isEvent&&<span className="tag">Event {l.pickupAt&&'pickup '+l.pickupAt}</span>}</h3>
    <p className="sub">{l.address}</p><Countdown until={l.safeUntil}/>
    <p className="match">{l.rank[0]===n.id?'Best match: ':'Offered to: '}<b>{n.name}</b>, {km(l,n).toFixed(1)} km{l.escalations>0&&<span className="tag warn">Escalated x{l.escalations}</span>}</p>
+   <a className="btn ghost" href={`https://www.google.com/maps/dir/?api=1&destination=${l.lat},${l.lng}`} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()}>Open in Google Maps</a>
    {l.status==='posted'&&hasNext&&<p className="sub">No reply? Escalates to the next NGO in {left}s</p>}
    <ol className="steps">{STEPS.map((s,k)=><li key={s[0]} className={k<=i?'on':''}>{s[1]}</li>)}</ol>
    <div className="acts">
