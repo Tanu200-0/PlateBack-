@@ -1,6 +1,27 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 
+
+const toListing = (r) => ({
+  id: r.id,
+  donorId: r.donor_id,
+  type: r.type,
+  quantity: r.quantity,
+  kg: r.kg,
+  address: r.address,
+  lat: r.lat,
+  lng: r.lng,
+  isEvent: r.is_event,
+  pickupAt: r.pickup_at,
+  photo: r.photo_url,
+  status: r.status,
+  rank: r.rank || [],
+  assignedNgo: r.assigned_ngo,
+  escalations: r.escalations,
+  safeUntil: new Date(r.safe_until).getTime(),
+  cookedAt: new Date(r.cooked_at).getTime(),
+});
+
 export function useNgoListings(ngoId) {
   const [listings, setListings] = useState([]);
 
@@ -12,7 +33,7 @@ export function useNgoListings(ngoId) {
         .from("listings")
         .select("*")
         .eq("assigned_ngo", ngoId);
-      if (!error) setListings(data);
+      if (!error) setListings(data.map(toListing));
     };
 
     load();
